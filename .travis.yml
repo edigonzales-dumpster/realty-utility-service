@@ -12,7 +12,7 @@ branches:
 
 script:
   - mvn -B package
-  - docker build -t $DOCKER_ACCOUNT/$DOCKER_REPO:latest -t $DOCKER_ACCOUNT/$DOCKER_REPO:$TRAVIS_BUILD_NUMBER .
+  - docker build -t $DOCKER_ACCOUNT/$DOCKER_REPO:latest -t $DOCKER_ACCOUNT/$DOCKER_REPO:$TRAVIS_BUILD_NUMBER -f src/main/docker/Dockerfile.jvm
 
 deploy:
   provider: script
