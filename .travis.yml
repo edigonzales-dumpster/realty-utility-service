@@ -1,29 +1,86 @@
 services:
     - docker
   
-  jdk:
+jdk:
     - openjdk8
   
-  env:
+env:
     global:
-      - DOCKER_ACCOUNT=sogis
-      - DOCKER_REPO=realty-utility-service
+        - DOCKER_ACCOUNT=sogis
+        - DOCKER_REPO=realty-utility-service
   
-  branches:
+branches:
     only:
-      - master
+        - master
   
-  script:
+script:
     - mvn -B package
     - docker images
   
-  deploy:
+deploy:
     provider: script
     script: echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin && docker push $DOCKER_ACCOUNT/$DOCKER_REPO
     on:
       branch: master
   
-  cache:
+cache:
+    directories:
+        - $HOME/.m2
+
+
+services:
+    - docker
+  
+jdk:
+    - openjdk8
+
+env:
+global:
+    - DOCKER_ACCOUNT=sogis
+
+branches:
+only:
+    - master
+
+script:
+    - mvn -B package
+    - docker images
+
+deploy:
+provider: script
+script: echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin && docker push $DOCKER_ACCOUNT/$DOCKER_REPO
+on:
+    branch: master
+
+cache:
+directories:
+    - $HOME/.m2
+
+services:
+    - docker
+    
+    jdk:
+    - openjdk8
+    
+    env:
+    global:
+        - DOCKER_ACCOUNT=sogis
+        - DOCKER_REPO=oereb-client
+    
+    branches:
+    only:
+        - master
+    
+    script:
+    - mvn -B package
+    - docker images
+    
+    deploy:
+    provider: script
+    script: echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin && docker push $DOCKER_ACCOUNT/$DOCKER_REPO
+    on:
+        branch: master
+    
+    cache:
     directories:
     - $HOME/.m2
-  
