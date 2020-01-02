@@ -25,8 +25,8 @@ import org.locationtech.jts.io.WKBWriter;
 import io.agroal.api.AgroalDataSource;
 
 @Path("/")
-public class ExampleResource {
-    private static final Logger LOGGER = Logger.getLogger(ExampleResource.class);
+public class MainController {
+    private static final Logger LOGGER = Logger.getLogger(MainController.class);
 
     private static final String TABLE_DM01VCH24LV95DLIEGENSCHAFTEN_LSNACHFUEHRUNG = "dm01vch24lv95dliegenschaften_lsnachfuehrung";
     private static final String TABLE_DM01VCH24LV95DLIEGENSCHAFTEN_GRUNDSTUECK = "dm01vch24lv95dliegenschaften_grundstueck";
@@ -73,7 +73,7 @@ public class ExampleResource {
                 
         String sql = "WITH realty AS\n" + 
                 "(\n" + 
-                "    SELECT grundstueck.t_id, grundstueck.nummer, grundstueck.nbident, grundstueck.egris_egrid, grundstueck.art, grundstueck.gueltigkeit, TO_CHAR(nf.gueltigereintrag, 'yyyy-mm-dd') AS gueltigereintrag, geom.geometrie\n" + 
+                "    SELECT grundstueck.t_id, grundstueck.nummer, grundstueck.nbident, grundstueck.egris_egrid, grundstueck.art, nf.gueltigkeit, TO_CHAR(nf.gueltigereintrag, 'yyyy-mm-dd') AS gueltigereintrag, geom.geometrie\n" + 
                 "    FROM "+dbschema+"."+TABLE_DM01VCH24LV95DLIEGENSCHAFTEN_GRUNDSTUECK+" AS grundstueck\n" + 
                 "    LEFT JOIN \n" + 
                 "    (\n" + 
@@ -86,7 +86,7 @@ public class ExampleResource {
                 "    LEFT JOIN "+dbschema+"."+TABLE_DM01VCH24LV95DLIEGENSCHAFTEN_LSNACHFUEHRUNG+" AS nf" + 
                 "    ON grundstueck.entstehung = nf.t_id WHERE ST_DWithin(ST_Transform(ST_PointFromText('"+wkt+"', "+srid+"),2056),geom.geometrie,1.0)\n" +                 
                 "    UNION ALL\n" + 
-                "    SELECT grundstueck.t_id, grundstueck.nummer, grundstueck.nbident, grundstueck.egris_egrid, grundstueck.art, grundstueck.gueltigkeit, TO_CHAR(nf.gueltigereintrag, 'yyyy-mm-dd') AS gueltigereintrag, geom.geometrie\n" + 
+                "    SELECT grundstueck.t_id, grundstueck.nummer, grundstueck.nbident, grundstueck.egris_egrid, grundstueck.art, nf.gueltigkeit, TO_CHAR(nf.gueltigereintrag, 'yyyy-mm-dd') AS gueltigereintrag, geom.geometrie\n" + 
                 "    FROM "+dbschema+"."+TABLE_DM01VCH24LV95DLIEGENSCHAFTEN_PROJGRUNDSTUECK+" AS grundstueck\n" + 
                 "    LEFT JOIN \n" + 
                 "    (\n" + 
